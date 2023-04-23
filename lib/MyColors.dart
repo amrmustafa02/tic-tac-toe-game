@@ -1,7 +1,7 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
-class MyColors{
- static Color xColor = const Color(0xFF3D9DD9);
- static Color oColor = const Color(0xFF3DC9D9);
- static Color dColor = const Color(0xFF999898);
+class MyColors {
+  static Color xColor = const Color(0xFF3D9DD9);
+  static Color oColor = Colors.red;
+  static Color dColor = const Color(0xFF999898);
 }

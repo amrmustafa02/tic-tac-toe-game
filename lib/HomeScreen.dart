@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int xWins = 0;
   int oWins = 0;
   int dWins = 0;
+  bool isCheckWin = false;
 
   @override
   Widget build(BuildContext context) {
@@ -167,22 +168,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const Spacer(),
-            Container(
-              margin: const EdgeInsets.all(20),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [
-                MyColors.oColor,
-                MyColors.xColor,
-              ])),
-              child: ElevatedButton(
-                onPressed: () {
-                  returnToStartState();
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent),
-                child: const Icon(Icons.repeat),
+            InkWell(
+              onTap: () {
+                returnToStartState();
+              },
+              child: Container(
+                margin: const EdgeInsets.all(20),
+                width: double.infinity,
+                height: 40,
+                alignment: Alignment.center,
+                color: const Color(0xFF4469b8),
+                child: const Text(
+                  "Start New Game",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
+                ),
               ),
             ),
             const Spacer()
@@ -194,7 +196,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onClick(String text, int position) {
     setState(() {
-
+      if (isCheckWin) {
+        return;
+      }
 
       if (board[position].isNotEmpty) {
         return;
@@ -208,24 +212,20 @@ class _HomeScreenState extends State<HomeScreen> {
         boardColors[position] = MyColors.oColor;
       }
 
-      if(checkDraw()){
+      if (checkIsWinner()) {
+        if (xTurn) {
+          xWins++;
+        } else {
+          oWins++;
+        }
+        isCheckWin = true;
+        return;
+      }
+      if (checkDraw()) {
         dWins++;
-        returnToStartState();
         return;
       }
-
-      if (!checkIsWinner()) {
-        xTurn = !xTurn;
-        return;
-      }
-
-
-      if (xTurn) {
-        xWins++;
-      } else {
-        oWins++;
-      }
-      returnToStartState();
+      xTurn = !xTurn;
     });
   }
 
@@ -242,6 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (board[start] == board[start + 1] &&
           board[start + 1] == board[start + 2] &&
           board[start + 2] == curPlayer) {
+        boardColors[start] = Colors.green;
+        boardColors[start + 1] = Colors.green;
+        boardColors[start + 2] = Colors.green;
         currentPlayer = curPlayer;
         return true;
       }
@@ -255,6 +258,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (board[start] == board[start + 3] &&
           board[start + 3] == board[start + 6] &&
           board[start + 6] == curPlayer) {
+        boardColors[start] = Colors.green;
+        boardColors[start + 3] = Colors.green;
+        boardColors[start + 6] = Colors.green;
         currentPlayer = curPlayer;
         return true;
       }
@@ -264,9 +270,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool checkAxis(String curPlayer) {
     if (board[0] == board[4] && board[4] == board[8] && board[8] == curPlayer) {
+      boardColors[0] = Colors.green;
+      boardColors[4] = Colors.green;
+      boardColors[8] = Colors.green;
+      currentPlayer = curPlayer;
       return true;
     }
     if (board[2] == board[4] && board[4] == board[6] && board[6] == curPlayer) {
+      boardColors[2] = Colors.green;
+      boardColors[4] = Colors.green;
+      boardColors[6] = Colors.green;
+      currentPlayer = curPlayer;
       return true;
     }
     return false;
@@ -288,13 +302,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ];
       xTurn = true;
       currentPlayer = '';
+      isCheckWin = false;
     });
-  }
-
-  void showAlertDialog(String winner) {
-    CupertinoAlertDialog(
-      content: Text(winner),
-    );
   }
 
   // check draw
@@ -303,6 +312,9 @@ class _HomeScreenState extends State<HomeScreen> {
       if (board[i] == '') {
         return false;
       }
+    }
+    for (int i = 0; i < 9; i++) {
+      boardColors[i] = Colors.grey;
     }
     return true;
   }
