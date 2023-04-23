@@ -3,18 +3,24 @@ import 'package:tic_tac_toe_app/MyColors.dart';
 
 // ignore: must_be_immutable
 class GameHeader extends StatelessWidget {
-   GameHeader({super.key});
-  int xWins =0;
-  int oWins =0;
-  int dWins =0;
+  GameHeader(this.xWins, this.oWins, this.dWins, {super.key});
+
+  int xWins = 0;
+  int oWins = 0;
+  int dWins = 0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(5),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "O",
@@ -29,6 +35,8 @@ class GameHeader extends StatelessWidget {
           ),
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   "X",
@@ -43,6 +51,8 @@ class GameHeader extends StatelessWidget {
           ),
           Expanded(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Image.asset(
                   "assets/balance.png",
@@ -61,6 +71,4 @@ class GameHeader extends StatelessWidget {
       ),
     );
   }
-
-
 }
